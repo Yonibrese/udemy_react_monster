@@ -1,30 +1,8 @@
 import React, { Component } from 'react'
 import { CardList } from './components/card-list/card-list.component';
+import { SearchBar } from './components/search-bar/search-bar.component';
 
 import './App.css';
-
-
-//function component and basic component from create react app
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           My name is yoni
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 // class component
 class App extends Component{
@@ -42,12 +20,24 @@ class App extends Component{
     .then((response)=>response.json())
     .then((users) => this.setState({ monsters: users }));
   }
+//search from chang event
+handleChange = (evt) => {
+  this.setState({searchFeild: evt.target.value});
+}
+
   render(){
+    const { monsters, searchFeild } = this.state;
+    const filterdMonsters = monsters.filter(monster => 
+      monster.name.toLowerCase().includes(searchFeild.toLowerCase())
+      );
     return(
       <div className="App">
-        <input type='search' placeholder="search monsters"
-        onChange={evt => this.setState({searchFeild: evt.target.value})}/>
-        <CardList monsters={this.state.monsters} />
+        <h1>Monsters Rolodex</h1>
+        <SearchBar
+          placeholder='search monsters'
+          handleChange = {this.handleChange} 
+        />
+        <CardList monsters={filterdMonsters} />
       </div>
     )
   }
